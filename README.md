@@ -1,5 +1,7 @@
 # brain-spike
 
+Inspired and canvas code by https://gist.github.com/mac2000/fc54e6d6bdcbfde28b03dc2a43611270
+
 ## Project setup
 ```
 yarn install
