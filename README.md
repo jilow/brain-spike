@@ -1,6 +1,6 @@
 # brain-spike
 
-Inspired and canvas code by https://gist.github.com/mac2000/fc54e6d6bdcbfde28b03dc2a43611270
+Checkout the demo here https://jilow.github.io/brain-spike/dist/index.html
 
 ## Project setup
 ```
@@ -29,3 +29,7 @@ yarn run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Credits
+
+Inspired and canvas code by https://gist.github.com/mac2000/fc54e6d6bdcbfde28b03dc2a43611270
