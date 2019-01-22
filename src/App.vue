@@ -2,14 +2,14 @@
   <div id="app">
     <div class="set-a">
       <h3>Data set: A</h3>
-      <p>Draw something, like a ❌</p>
+      <p>Draw something, like a ✔️</p>
       <Canvas ref="a-1" />
       <Canvas ref="a-2" />
       <Canvas ref="a-3" />
     </div>
     <div class="set-b">
       <h3>Data set: B</h3>
-      <p>Draw something, like a ⭕️</p>
+      <p>Draw something, like a ❌</p>
       <Canvas ref="b-1" />
       <Canvas ref="b-2" />
       <Canvas ref="b-3" />
@@ -18,7 +18,7 @@
     <code ref="error"></code>
     <div class="test">
       <h3>Test item</h3>
-      <p>Now draw something to test, like either a ❌ or ⭕️</p>
+      <p>Now draw something to test, like either a ✔️ or ❌</p>
       <Canvas ref="test" />
     </div>
     <div>
