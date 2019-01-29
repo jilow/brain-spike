@@ -1,36 +1,43 @@
 <template>
   <div id="app">
-    <div class="set-a">
-      <h3>Data set: A</h3>
-      <p>Draw something, like a ✔️</p>
-      <Canvas ref="a-1" />
-      <Canvas ref="a-2" />
-      <Canvas ref="a-3" />
-    </div>
-    <div class="set-b">
-      <h3>Data set: B</h3>
-      <p>Draw something, like a ❌</p>
-      <Canvas ref="b-1" />
-      <Canvas ref="b-2" />
-      <Canvas ref="b-3" />
-    </div>
-    <button class="material purple" ref="train" @click="train">Train me!</button>
-    <code ref="error"></code>
-    <div class="test">
-      <h3>Test item</h3>
-      <p>Now draw something to test, like either a ✔️ or ❌</p>
-      <Canvas ref="test" />
-    </div>
-    <div>
-      <code ref="answer"></code>
-    </div>
-    <button class="material" @click="test">Test me!</button>
+
+    <CanvasContainer
+      ref="data-a"
+      title="Data set: A"
+      description="Draw something, like a ✔️"
+      count=3
+      color="#51bb8d" />
+
+    <CanvasContainer
+      ref="data-b"
+      title="Data set: B"
+      description="Draw something, like a ❌"
+      count=3
+      color="#ccb0da" />
+
+    <button class="material purple" @click="train" :disabled="training">
+      {{ training ? 'Training...' : 'Train me!' }}
+    </button>
+
+    <code class="error">{{ error }}</code>
+
+    <CanvasContainer
+      ref="data-test"
+      title="Test item"
+      description="Now draw something to test, like either a ✔️ or ❌"
+      count=1
+      color="#ffe2bc" />
+
+    <button class="material" @click="test" :disabled="!trained">Test me!</button>
+
+    <code>{{ answer }}</code>
   </div>
 </template>
 
 <script>
 import brain from 'brain.js'
 import Canvas from './components/Canvas.vue'
+import CanvasContainer from './components/CanvasContainer.vue'
 
 const net = new brain.NeuralNetwork()
 
@@ -38,37 +45,48 @@ export default {
   name: 'app',
   components: {
     Canvas,
+    CanvasContainer,
+  },
+  data: function() {
+    return {
+      trained: false,
+      training: false,
+      error: ' ',
+      answer: ' ',
+    }
   },
   methods: {
     train: function() {
-      const btn = this.$refs['train']
-      const btnText = btn.innerHTML
-      btn.innerHTML = 'training...'
-      btn.disabled = true
-      setTimeout(() => {
-        let data = []
-        for (let key in this.$refs) {
-          if (key != 'test' && key.startsWith('a-') || key.startsWith('b-')) {
-            let canvas = this.$refs[key]
-            data.push({
-              input: canvas.data(),
-              output: { [key.startsWith('a') ? 'a' : 'b']: 1 }
-            })
-          }
+      this.training = true
+      const a = this.$refs['data-a'].getData()
+      const b = this.$refs['data-b'].getData()
+      let data = []
+      a.forEach(s => data.push({ input: s, output: { 'a': 1 } }))
+      b.forEach(s => data.push({ input: s, output: { 'b': 1 } }))
+      net.trainAsync(data, { log: false, iterations: 1000, errorThresh: 0.05 })
+      .then(res => {
+        this.training = false
+        if (res.error > 0.05) {
+          this.error = 'I need better training data! :('
+        } else {
+          this.trained = true
         }
-        const result = net.train(data, { log: false, iterations: 20000 })
-        if (result.error) this.$refs['error'] = result.error
-        btn.innerHTML = btnText
-        btn.disabled = false
-      }, 1)
+      })
+      .catch(err => {
+        console.error(err)
+        this.error = 'Whoops! Something wen\'t wrong. Check the console'
+      })
     },
     test: function() {
-      const answer = this.$refs['answer']
-      answer.innerHTML = ''
-      const test = this.$refs['test']
-      const result = brain.likely(test.data(), net)
-      test.reset()
-      answer.innerHTML = `I think that's a "${result.toUpperCase()}"!`
+      const test = this.$refs['data-test']
+      const data = test.getData()[0]
+      const result = brain.likely(data, net)
+      if (!result) {
+        this.error = 'Could not run test, did you train the bot?'
+      } else {
+        this.answer = `I think that's a "${result.toUpperCase()}"!`
+        test.reset()
+      }
     }
   }
 }
@@ -83,16 +101,18 @@ export default {
   color: #2c3e50;
   margin: 3rem 1rem;
 }
-Canvas {
-  margin: 0 1rem;
-  background-color: '#51bb8d';
-}
 h3 {
   margin-bottom: 0.6rem;
 }
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+}
+code {
+  display: block;
+}
+code.error {
+  color: red;
 }
 button {
   font-size: 0.8em;
@@ -111,14 +131,9 @@ button {
   outline: 0;
   margin: 1rem 0.5rem;
 }
-.set-a > Canvas {
-  background-color: #96eac6;
-}
-.set-b > Canvas {
-  background-color: #ccb0da;
-}
-.test > canvas {
-  background-color: #ffe2bc;
+button:disabled, button[disabled] {
+  background-color: #999999;
+  cursor: not-allowed;
 }
 .purple {
   background-color: #9b5aff;

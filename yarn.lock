@@ -3859,10 +3859,6 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
 
-mi-framework@hetznerZA/mi-framework:
-  version "1.0.0"
-  resolved "https://codeload.github.com/hetznerZA/mi-framework/tar.gz/34f5e99adb0063647c8f2cd3a2aa50eb73a0dbb1"
-
 micromatch@^3.1.10, micromatch@^3.1.4, micromatch@^3.1.8, micromatch@^3.1.9:
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-3.1.10.tgz#70859bc95c9840952f359a068a3fc49f9ecfac23"

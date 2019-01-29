@@ -1,13 +1,21 @@
 <template>
-  <canvas class="canvas" ref="canvas" width="160" height="160">
-  
-  </canvas>
+  <canvas 
+    class="canvas"
+    ref="canvas"
+    width="160"
+    height="160"
+    :style="{ backgroundColor: color }"
+  ></canvas>
 </template>
 
 <script>
 export default {
   name: 'Canvas',
   props: {
+    color: {
+      type: String,
+      default: '#51bb8d'
+    }
   },
   methods: {
     data: function() {
@@ -115,6 +123,7 @@ export default {
       return vector
     }
     el.addEventListener('mousedown', event => {
+      if (event.button != 0) return
       const bounds = event.target.getBoundingClientRect()
       const x = event.clientX - bounds.left
       const y = event.clientY - bounds.top

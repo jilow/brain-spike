@@ -4,7 +4,7 @@ Checkout the demo here https://jilow.github.io/brain-spike/dist/index.html
 
 ## Todo
 
-- [ ] Improve data binding usage
+- [*] Improve data binding usage
 - [ ] Ask for user feedback and add results to training
 
 ## Project setup
